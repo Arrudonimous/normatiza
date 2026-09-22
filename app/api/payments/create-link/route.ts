@@ -5,7 +5,9 @@ import { createPaymentLink } from "@/lib/payments/infinitepay";
 import { EXPORT_PRICE_CENTS } from "@/lib/payments/pricing";
 
 function baseUrl(request: NextRequest): string {
-  return process.env.NEXT_PUBLIC_APP_URL ?? new URL(request.url).origin;
+  // `||` (não `??`) de propósito: NEXT_PUBLIC_APP_URL="" no .env também deve cair
+  // pro origin da requisição, não virar uma URL relativa inválida pra InfinityPay.
+  return process.env.NEXT_PUBLIC_APP_URL || new URL(request.url).origin;
 }
 
 export async function POST(request: NextRequest) {
