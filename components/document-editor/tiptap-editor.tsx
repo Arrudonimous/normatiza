@@ -55,7 +55,8 @@ export function TiptapEditor({
     },
     editorProps: {
       attributes: {
-        class: "min-h-[320px] rounded-md border border-slate-300 bg-white px-4 py-3 text-sm leading-relaxed focus:outline-none",
+        class:
+          "min-h-[320px] border border-rule bg-paper-raised px-6 py-5 font-serif text-base leading-[1.6] text-ink focus:outline-none",
       },
     },
   });
@@ -64,7 +65,7 @@ export function TiptapEditor({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex flex-wrap gap-1 rounded-md border border-slate-200 bg-slate-50 p-1">
+      <div className="flex flex-wrap gap-1 border border-b-0 border-rule bg-paper px-1 py-1">
         <ToolbarButton
           active={editor.isActive("heading", { level: 1 })}
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
@@ -97,7 +98,7 @@ export function TiptapEditor({
         </ToolbarButton>
       </div>
       <EditorContent editor={editor} />
-      <p className="text-xs text-slate-400">
+      <p className="text-xs text-ink-muted">
         Dentro da citação longa, aperte Enter duas vezes numa linha vazia pra sair dela e
         voltar ao texto normal.
       </p>
@@ -118,8 +119,8 @@ function ToolbarButton({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded px-2 py-1 text-xs font-medium ${
-        active ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-200"
+      className={`px-2 py-1 text-xs font-medium ${
+        active ? "bg-red text-paper-raised" : "text-ink-muted hover:bg-paper-raised hover:text-ink"
       }`}
     >
       {children}

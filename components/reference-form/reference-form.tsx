@@ -6,7 +6,7 @@ import { defaultValuesForType } from "@/lib/abnt/default-values";
 import { MESES_ABREVIADOS } from "@/lib/abnt/months";
 import { referenceFormSchema, type ReferenceFormValues } from "@/lib/abnt/schemas";
 import { REFERENCE_TYPE_LABELS, type Reference, type ReferenceType } from "@/lib/abnt/types";
-import { Field, inputClass } from "../ui/field";
+import { Field, inputClass, panelClass, primaryButtonClass } from "../ui/field";
 import { AuthorsField } from "./authors-field";
 
 const REFERENCE_TYPES = Object.keys(REFERENCE_TYPE_LABELS) as ReferenceType[];
@@ -40,7 +40,7 @@ export function ReferenceForm({
     <FormProvider {...methods}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-white p-5"
+        className={`flex flex-col gap-4 ${panelClass}`}
       >
         <Field label="Tipo de referência">
           <select
@@ -65,10 +65,7 @@ export function ReferenceForm({
 
         <FormErrors errors={formState.errors} />
 
-        <button
-          type="submit"
-          className="self-start rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
-        >
+        <button type="submit" className={`self-start ${primaryButtonClass}`}>
           Adicionar referência
         </button>
       </form>
@@ -81,7 +78,7 @@ export function ReferenceForm({
       .filter(Boolean);
     if (messages.length === 0) return null;
     return (
-      <ul className="text-xs text-red-600">
+      <ul className="text-xs text-red">
         {messages.map((m, i) => (
           <li key={i}>{m}</li>
         ))}

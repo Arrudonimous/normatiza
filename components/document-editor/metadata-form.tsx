@@ -1,7 +1,7 @@
 "use client";
 
 import type { DocumentMetadata } from "@/lib/document-model";
-import { Field, inputClass } from "../ui/field";
+import { Field, inputClass, panelClass } from "../ui/field";
 
 export function MetadataForm({
   metadata,
@@ -15,7 +15,7 @@ export function MetadataForm({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-3 rounded-lg border border-slate-200 bg-white p-5">
+    <div className={`grid grid-cols-2 gap-3 ${panelClass}`}>
       <Field label="Título do trabalho" className="col-span-2">
         <input
           className={inputClass}

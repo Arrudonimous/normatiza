@@ -5,7 +5,7 @@ export function SummaryPreview({ blocks }: { blocks: DocumentBlock[] }) {
 
   if (headings.length === 0) {
     return (
-      <p className="text-sm text-slate-500">
+      <p className="text-sm text-ink-muted">
         O sumário é gerado automaticamente conforme você adiciona títulos no editor.
       </p>
     );
@@ -16,10 +16,10 @@ export function SummaryPreview({ blocks }: { blocks: DocumentBlock[] }) {
       {headings.map((h, i) => (
         <li
           key={i}
-          className="text-sm text-slate-700"
+          className="text-sm text-ink"
           style={{ paddingLeft: `${(h.level - 1) * 16}px` }}
         >
-          {h.text || <span className="text-slate-400">(sem título)</span>}
+          {h.text || <span className="text-ink-muted">(sem título)</span>}
         </li>
       ))}
     </ul>

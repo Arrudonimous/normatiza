@@ -62,8 +62,8 @@ function ExportSuccessContent() {
     <main className="mx-auto flex max-w-lg flex-col gap-4 px-6 py-24 text-center">
       {(status === "checking" || status === "pending") && (
         <>
-          <h1 className="text-xl font-semibold text-slate-900">Confirmando seu pagamento...</h1>
-          <p className="text-sm text-slate-600">
+          <h1 className="font-serif text-xl text-ink">Confirmando seu pagamento...</h1>
+          <p className="text-sm text-ink-muted">
             Isso costuma levar só alguns segundos. Não feche essa página.
           </p>
         </>
@@ -71,10 +71,10 @@ function ExportSuccessContent() {
 
       {status === "approved" && downloadToken && (
         <>
-          <h1 className="text-xl font-semibold text-slate-900">Pagamento confirmado</h1>
+          <h1 className="font-serif text-xl text-ink">Pagamento confirmado</h1>
           <a
             href={`/api/export/download?token=${downloadToken}`}
-            className="mx-auto rounded-md bg-slate-900 px-5 py-3 text-sm font-medium text-white hover:bg-slate-800"
+            className="mx-auto bg-red px-5 py-3 text-sm font-medium text-paper-raised hover:bg-red-dark"
           >
             Baixar documento formatado
           </a>
@@ -82,13 +82,13 @@ function ExportSuccessContent() {
       )}
 
       {status === "rejected" && (
-        <h1 className="text-xl font-semibold text-slate-900">
+        <h1 className="font-serif text-xl text-ink">
           O pagamento não foi aprovado. Tente novamente.
         </h1>
       )}
 
       {(status === "not_found" || status === "error") && (
-        <h1 className="text-xl font-semibold text-slate-900">
+        <h1 className="font-serif text-xl text-ink">
           Não conseguimos localizar esse pagamento. Entre em contato se o valor foi cobrado.
         </h1>
       )}

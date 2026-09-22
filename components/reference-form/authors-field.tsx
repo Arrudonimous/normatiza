@@ -1,7 +1,7 @@
 "use client";
 
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { inputClass } from "../ui/field";
+import { inputClass, secondaryButtonClass } from "../ui/field";
 
 export function AuthorsField({ name, label }: { name: string; label: string }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -10,13 +10,13 @@ export function AuthorsField({ name, label }: { name: string; label: string }) {
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-sm font-medium text-slate-700">{label}</span>
+      <span className="text-sm font-medium text-ink-muted">{label}</span>
       {fields.length === 0 && (
-        <p className="text-xs text-slate-500">Nenhum autor adicionado ainda.</p>
+        <p className="text-xs text-ink-muted">Nenhum autor adicionado ainda.</p>
       )}
       {fields.map((field, index) => (
         <div key={field.id} className="flex items-end gap-2">
-          <label className="flex flex-1 flex-col gap-1 text-xs text-slate-600">
+          <label className="flex flex-1 flex-col gap-1 text-xs text-ink-muted">
             Sobrenome
             <input
               className={inputClass}
@@ -24,7 +24,7 @@ export function AuthorsField({ name, label }: { name: string; label: string }) {
               {...register(`${name}.${index}.sobrenome`)}
             />
           </label>
-          <label className="flex flex-1 flex-col gap-1 text-xs text-slate-600">
+          <label className="flex flex-1 flex-col gap-1 text-xs text-ink-muted">
             Nome
             <input
               className={inputClass}
@@ -32,11 +32,7 @@ export function AuthorsField({ name, label }: { name: string; label: string }) {
               {...register(`${name}.${index}.nome`)}
             />
           </label>
-          <button
-            type="button"
-            onClick={() => remove(index)}
-            className="h-9 rounded-md border border-slate-300 px-2 text-xs text-slate-600 hover:bg-slate-50"
-          >
+          <button type="button" onClick={() => remove(index)} className={`h-9 ${secondaryButtonClass}`}>
             Remover
           </button>
         </div>
@@ -44,7 +40,7 @@ export function AuthorsField({ name, label }: { name: string; label: string }) {
       <button
         type="button"
         onClick={() => append({ sobrenome: "", nome: "" })}
-        className="self-start rounded-md border border-slate-300 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
+        className={`self-start ${secondaryButtonClass}`}
       >
         + Adicionar autor
       </button>
