@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getValidDownloadToken } from "@/lib/db/download-tokens";
-import { getDocument } from "@/lib/db/documents";
+import { consumeDownloadToken, getValidDownloadToken } from "@/lib/db/download-tokens";
+import { getDocument, markDocumentExported } from "@/lib/db/documents";
+import { generateDocx } from "@/lib/export/generate-docx";
+import type { DocumentBlock, DocumentMetadata, InternalDocument } from "@/lib/document-model";
+import type { Reference } from "@/lib/abnt/types";
 
 export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get("token");
@@ -13,20 +16,28 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Link expirado ou inválido" }, { status: 410 });
   }
 
-  const document = await getDocument(row.documentId);
-  if (!document) {
+  const documentRow = await getDocument(row.documentId);
+  if (!documentRow) {
     return NextResponse.json({ error: "Documento não encontrado" }, { status: 404 });
   }
 
-  // TODO(Plano B): chamar generateDocx(document) assim que o editor e o modelo de
-  // documento interno existirem (lib/export/generate-docx.ts), devolver o arquivo
-  // .docx como resposta binária e só então chamar consumeDownloadToken(token). Por
-  // enquanto o pagamento e o token já funcionam de ponta a ponta, só falta essa
-  // peça pra liberar o arquivo de verdade (por isso o token não é consumido aqui).
-  return NextResponse.json(
-    {
-      error: "Geração do .docx ainda não implementada (aguardando o editor/Plano B)",
+  const internalDocument: InternalDocument = {
+    metadata: documentRow.metadata as DocumentMetadata,
+    blocks: (documentRow.content as { blocks?: DocumentBlock[] }).blocks ?? [],
+    references: documentRow.references as Reference[],
+  };
+
+  const buffer = await generateDocx(internalDocument);
+
+  await consumeDownloadToken(token);
+  await markDocumentExported(documentRow.id);
+
+  const fileName = `${(internalDocument.metadata.titulo || "documento-normatiza").slice(0, 60)}.docx`;
+
+  return new NextResponse(new Uint8Array(buffer), {
+    headers: {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "Content-Disposition": `attachment; filename="${encodeURIComponent(fileName)}"`,
     },
-    { status: 501 },
-  );
+  });
 }
