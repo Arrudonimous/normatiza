@@ -22,7 +22,7 @@ const CitationBlockquote = Blockquote.extend({
  * `initialContent` só é usado na criação do editor (é a fonte de verdade durante a
  * digitação é o próprio Tiptap). Pra carregar um conteúdo diferente depois de montado
  * (ex.: depois de importar um .docx), o componente pai deve forçar a remontagem com
- * uma prop `key` diferente, em vez de reaplicar o conteúdo via effect — isso evita o
+ * uma prop `key` diferente, em vez de reaplicar o conteúdo via effect: isso evita o
  * loop clássico de reset que apaga o texto a cada tecla digitada.
  */
 export function TiptapEditor({

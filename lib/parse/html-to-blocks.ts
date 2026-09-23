@@ -6,7 +6,7 @@ const HEADING_TAGS = new Set(["h1", "h2", "h3", "h4", "h5", "h6"]);
 /**
  * Converte o HTML que o mammoth gera a partir de um .docx pro nosso modelo de
  * blocos. Só reconhece título (h1-h6, com h4-h6 achatados pro nível 3), parágrafo
- * e citação (blockquote) — qualquer outra coisa (lista, tabela, imagem) é ignorada
+ * e citação (blockquote): qualquer outra coisa (lista, tabela, imagem) é ignorada
  * nessa primeira versão, condizente com a importação sendo "melhor esforço".
  */
 export function htmlToBlocks(html: string): DocumentBlock[] {

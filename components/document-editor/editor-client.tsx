@@ -27,7 +27,7 @@ export function EditorClient({ initialUser }: { initialUser: CurrentUser | null 
   const [metadata, setMetadata] = useState(emptyDocumentMetadata());
   const [blocks, setBlocks] = useState<DocumentBlock[]>([]);
   // O Tiptap é a fonte de verdade depois de montado (ver TiptapEditor), então isso só
-  // é recalculado quando `editorVersion` muda — ou seja, quando uma importação de
+  // é recalculado quando `editorVersion` muda, ou seja, quando uma importação de
   // .docx substitui o conteúdo e força o editor a remontar do zero.
   const [editorContent, setEditorContent] = useState(() => blocksToTiptapJson([]));
   const [editorVersion, setEditorVersion] = useState(0);
