@@ -15,19 +15,19 @@ export function AuthorsField({ name, label }: { name: string; label: string }) {
         <p className="text-xs text-ink-muted">Nenhum autor adicionado ainda.</p>
       )}
       {fields.map((field, index) => (
-        <div key={field.id} className="flex items-end gap-2">
-          <label className="flex flex-1 flex-col gap-1 text-xs text-ink-muted">
+        <div key={field.id} className="grid grid-cols-[1fr_1fr_auto] items-end gap-2">
+          <label className="flex min-w-0 flex-col gap-1 text-xs text-ink-muted">
             Sobrenome
             <input
-              className={inputClass}
+              className={`${inputClass} min-w-0`}
               placeholder="Silva"
               {...register(`${name}.${index}.sobrenome`)}
             />
           </label>
-          <label className="flex flex-1 flex-col gap-1 text-xs text-ink-muted">
+          <label className="flex min-w-0 flex-col gap-1 text-xs text-ink-muted">
             Nome
             <input
-              className={inputClass}
+              className={`${inputClass} min-w-0`}
               placeholder="João"
               {...register(`${name}.${index}.nome`)}
             />
@@ -36,7 +36,7 @@ export function AuthorsField({ name, label }: { name: string; label: string }) {
             type="button"
             onClick={() => remove(index)}
             aria-label="Remover autor"
-            className="flex h-10 shrink-0 items-center border border-rule px-3 text-xs text-ink-muted hover:border-red hover:text-red"
+            className="flex h-10 items-center border border-rule px-3 text-xs text-ink-muted hover:border-red hover:text-red"
           >
             Remover
           </button>
