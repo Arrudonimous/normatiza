@@ -22,18 +22,33 @@ interface PendingPrices {
   pacoteDocumentos: number;
 }
 
-export function EditorClient({ initialUser }: { initialUser: CurrentUser | null }) {
+interface InitialDocument {
+  id: string;
+  metadata: ReturnType<typeof emptyDocumentMetadata>;
+  blocks: DocumentBlock[];
+  references: Reference[];
+}
+
+export function EditorClient({
+  initialUser,
+  initialDocument,
+}: {
+  initialUser: CurrentUser | null;
+  initialDocument?: InitialDocument | null;
+}) {
   const router = useRouter();
-  const [metadata, setMetadata] = useState(emptyDocumentMetadata());
-  const [blocks, setBlocks] = useState<DocumentBlock[]>([]);
+  const [metadata, setMetadata] = useState(initialDocument?.metadata ?? emptyDocumentMetadata());
+  const [blocks, setBlocks] = useState<DocumentBlock[]>(initialDocument?.blocks ?? []);
   // O Tiptap é a fonte de verdade depois de montado (ver TiptapEditor), então isso só
   // é recalculado quando `editorVersion` muda, ou seja, quando uma importação de
   // .docx substitui o conteúdo e força o editor a remontar do zero.
-  const [editorContent, setEditorContent] = useState(() => blocksToTiptapJson([]));
+  const [editorContent, setEditorContent] = useState(() =>
+    blocksToTiptapJson(initialDocument?.blocks ?? []),
+  );
   const [editorVersion, setEditorVersion] = useState(0);
   const [importWarnings, setImportWarnings] = useState<string[]>([]);
-  const [references, setReferences] = useState<Reference[]>([]);
-  const [documentId, setDocumentId] = useState<string | null>(null);
+  const [references, setReferences] = useState<Reference[]>(initialDocument?.references ?? []);
+  const [documentId, setDocumentId] = useState<string | null>(initialDocument?.id ?? null);
 
   const [user, setUser] = useState<CurrentUser | null>(initialUser);
   const [showAuthPanel, setShowAuthPanel] = useState(false);

@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { db } from "./client";
 import { documents } from "./schema";
 
@@ -26,4 +26,12 @@ export async function updateDocument(id: string, data: Partial<NewDocumentRow>) 
 
 export async function markDocumentExported(id: string) {
   return updateDocument(id, { status: "exported" });
+}
+
+export async function getDocumentsByUser(userId: string) {
+  return db()
+    .select()
+    .from(documents)
+    .where(eq(documents.userId, userId))
+    .orderBy(desc(documents.updatedAt));
 }

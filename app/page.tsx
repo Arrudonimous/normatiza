@@ -1,17 +1,11 @@
 import Link from "next/link";
 import { primaryButtonClass } from "@/components/ui/field";
+import { SiteHeader } from "@/components/ui/site-header";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="mx-auto flex w-full max-w-3xl items-center justify-between px-6 pt-8">
-        <span className="font-serif text-lg text-ink">
-          Normatiza<span className="text-red">.</span>
-        </span>
-        <Link href="/referencias" className="text-sm text-ink-muted hover:text-ink">
-          Gerador de referências
-        </Link>
-      </header>
+      <SiteHeader currentPath="home" />
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-16 sm:py-24">
         {/* Guia de margem: a mesma regra de 3cm/2cm que o produto aplica no documento

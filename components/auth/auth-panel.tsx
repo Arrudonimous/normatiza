@@ -7,11 +7,13 @@ import { login, signup, type CurrentUser } from "@/lib/auth/client";
 export function AuthPanel({
   onAuthenticated,
   message,
+  defaultMode = "signup",
 }: {
   onAuthenticated: (user: CurrentUser) => void;
   message?: string;
+  defaultMode?: "login" | "signup";
 }) {
-  const [mode, setMode] = useState<"login" | "signup">("signup");
+  const [mode, setMode] = useState<"login" | "signup">(defaultMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);

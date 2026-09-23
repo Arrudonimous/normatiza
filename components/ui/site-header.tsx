@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth/current-user";
-import { LogoutButton } from "../auth/logout-button";
+import { HeaderNav } from "./header-nav";
 
-export async function SiteHeader({ currentPath }: { currentPath: "referencias" | "editor" }) {
+type PathKey = "home" | "referencias" | "editor" | "conta";
+
+export async function SiteHeader({ currentPath }: { currentPath: PathKey }) {
   const user = await getCurrentUser();
 
   return (
@@ -11,46 +13,8 @@ export async function SiteHeader({ currentPath }: { currentPath: "referencias" |
         <Link href="/" className="font-serif text-lg text-ink">
           Normatiza<span className="text-red">.</span>
         </Link>
-        <div className="flex items-center gap-6">
-          <nav className="flex gap-6 text-sm">
-            <NavLink href="/referencias" active={currentPath === "referencias"}>
-              Referências
-            </NavLink>
-            <NavLink href="/editor" active={currentPath === "editor"}>
-              Editor
-            </NavLink>
-          </nav>
-          {user && (
-            <div className="flex items-center gap-3 text-sm text-ink-muted">
-              <span>{user.email}</span>
-              <LogoutButton />
-            </div>
-          )}
-        </div>
+        <HeaderNav user={user ? { email: user.email } : null} currentPath={currentPath} />
       </div>
     </header>
-  );
-}
-
-function NavLink({
-  href,
-  active,
-  children,
-}: {
-  href: string;
-  active: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`border-b-2 pb-1 transition-colors ${
-        active
-          ? "border-red font-medium text-ink"
-          : "border-transparent text-ink-muted hover:text-ink"
-      }`}
-    >
-      {children}
-    </Link>
   );
 }

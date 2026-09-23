@@ -43,3 +43,13 @@ export async function incrementPackUsage(packId: string) {
     .returning();
   return row;
 }
+
+/** O pacote mais recente do usuário, tenha cota ou não (pra mostrar status na conta). */
+export async function getLatestPackForUser(userId: string): Promise<PackRow | undefined> {
+  const [row] = await db()
+    .select()
+    .from(packs)
+    .where(eq(packs.userId, userId))
+    .orderBy(desc(packs.createdAt));
+  return row;
+}
