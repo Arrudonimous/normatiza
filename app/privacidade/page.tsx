@@ -1,13 +1,10 @@
-import { SiteHeader } from "@/components/ui/site-header";
-
 export const metadata = {
   title: "Política de Privacidade",
 };
 
 export default function PrivacidadePage() {
   return (
-    <div className="min-h-screen">
-      <SiteHeader currentPath="home" />
+    <div className="flex-1">
       <main className="mx-auto max-w-2xl px-6 py-16">
         <h1 className="font-serif text-3xl text-ink">Política de Privacidade</h1>
         <p className="mt-2 text-sm text-ink-muted">Última atualização: 23 de setembro de 2026.</p>

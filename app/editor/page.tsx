@@ -1,5 +1,4 @@
 import { EditorClient } from "@/components/document-editor/editor-client";
-import { SiteHeader } from "@/components/ui/site-header";
 import { getCurrentUser } from "@/lib/auth/current-user";
 import { getDocument } from "@/lib/db/documents";
 import type { DocumentBlock, DocumentMetadata } from "@/lib/document-model";
@@ -29,13 +28,10 @@ export default async function EditorPage({
   }
 
   return (
-    <div className="min-h-screen">
-      <SiteHeader currentPath="editor" />
-      <EditorClient
-        key={initialDocument?.id ?? "new"}
-        initialUser={user ? { id: user.id, email: user.email } : null}
-        initialDocument={initialDocument}
-      />
-    </div>
+    <EditorClient
+      key={initialDocument?.id ?? "new"}
+      initialUser={user ? { id: user.id, email: user.email } : null}
+      initialDocument={initialDocument}
+    />
   );
 }

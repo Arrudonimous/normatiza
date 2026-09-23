@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { SiteHeader } from "@/components/ui/site-header";
 import { panelClass, primaryButtonClass, secondaryButtonClass } from "@/components/ui/field";
 import { getCurrentUser } from "@/lib/auth/current-user";
 import { getDocumentsByUser } from "@/lib/db/documents";
@@ -29,8 +28,7 @@ export default async function ContaPage() {
   const daysLeft = pack ? Math.max(0, Math.ceil((pack.expiresAt.getTime() - now.getTime()) / 86_400_000)) : 0;
 
   return (
-    <div className="min-h-screen">
-      <SiteHeader currentPath="conta" />
+    <div className="flex-1">
       <main className="mx-auto flex max-w-3xl flex-col gap-8 px-6 py-10">
         <header>
           <h1 className="font-serif text-2xl text-ink">Minha conta</h1>

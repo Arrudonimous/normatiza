@@ -29,3 +29,18 @@ body {
   color: var(--ink);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
 }
+
+@keyframes stamp-press {
+  0%, 100% {
+    transform: translate(0, 0);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  50% {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 var(--ink);
+  }
+}
+
+.loading-stamp {
+  animation: stamp-press 0.9s ease-in-out infinite;
+}
