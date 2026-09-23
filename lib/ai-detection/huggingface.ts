@@ -76,9 +76,9 @@ export async function translateToEnglish(text: string): Promise<string> {
 }
 
 export interface AiDetectionResult {
-  aiProbability: number; // 0 a 1, média entre as seções analisadas
+  aiProbability: number; // 0 a 1: o trecho mais suspeito entre as seções analisadas
   label: "ai" | "human" | "unknown";
-  sections: number; // quantos trechos de ~380 palavras foram analisados
+  sections: number; // quantos trechos de ~260 palavras foram analisados
 }
 
 interface ClassificationPrediction {
@@ -135,8 +135,14 @@ async function detectAiSection(englishChunk: string): Promise<SectionResult> {
 }
 
 /**
- * `maxSections` controla quantos trechos de ~380 palavras são analisados (cada um é
+ * `maxSections` controla quantos trechos de ~260 palavras são analisados (cada um é
  * uma chamada à API). Planos maiores podem varrer mais do texto em vez de só o começo.
+ *
+ * O resultado final é o trecho com MAIOR chance de IA, não a média entre os trechos.
+ * Isso importa na prática: um documento real com introdução redigida à mão e um
+ * parágrafo colado do ChatGPT no meio tem que acusar esse parágrafo, não sair "humano
+ * no geral" porque o resto dilui a média. Também protege contra o classificador errar
+ * feio (perto de 0%) numa única seção e mascarar um sinal forte de IA nas outras.
  */
 export async function detectAiText(englishText: string, maxSections = 1): Promise<AiDetectionResult> {
   const chunks = chunkByWords(englishText, WORDS_PER_SECTION).slice(0, Math.max(1, maxSections));
@@ -147,10 +153,10 @@ export async function detectAiText(englishText: string, maxSections = 1): Promis
     return { aiProbability: sections[0].aiProbability, label: "unknown", sections: sections.length };
   }
 
-  const avgProbability = known.reduce((sum, s) => sum + s.aiProbability, 0) / known.length;
+  const mostSuspicious = known.reduce((a, b) => (b.aiProbability > a.aiProbability ? b : a));
   return {
-    aiProbability: avgProbability,
-    label: avgProbability >= 0.5 ? "ai" : "human",
+    aiProbability: mostSuspicious.aiProbability,
+    label: mostSuspicious.aiProbability >= 0.5 ? "ai" : "human",
     sections: sections.length,
   };
 }
