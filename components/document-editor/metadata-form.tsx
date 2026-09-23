@@ -15,7 +15,7 @@ export function MetadataForm({
   }
 
   return (
-    <div className={`grid grid-cols-2 gap-3 ${panelClass}`}>
+    <div className={`grid grid-cols-2 gap-4 ${panelClass}`}>
       <Field label="Título do trabalho" className="col-span-2">
         <input
           className={inputClass}

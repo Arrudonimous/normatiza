@@ -8,20 +8,37 @@ export function SiteHeader({ currentPath }: { currentPath: "referencias" | "edit
           Normatiza<span className="text-red">.</span>
         </Link>
         <nav className="flex gap-6 text-sm">
-          <Link
-            href="/referencias"
-            className={currentPath === "referencias" ? "text-ink" : "text-ink-muted hover:text-ink"}
-          >
+          <NavLink href="/referencias" active={currentPath === "referencias"}>
             Referências
-          </Link>
-          <Link
-            href="/editor"
-            className={currentPath === "editor" ? "text-ink" : "text-ink-muted hover:text-ink"}
-          >
+          </NavLink>
+          <NavLink href="/editor" active={currentPath === "editor"}>
             Editor
-          </Link>
+          </NavLink>
         </nav>
       </div>
     </header>
+  );
+}
+
+function NavLink({
+  href,
+  active,
+  children,
+}: {
+  href: string;
+  active: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`border-b-2 pb-1 transition-colors ${
+        active
+          ? "border-red font-medium text-ink"
+          : "border-transparent text-ink-muted hover:text-ink"
+      }`}
+    >
+      {children}
+    </Link>
   );
 }

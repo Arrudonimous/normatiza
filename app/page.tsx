@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { primaryButtonClass } from "@/components/ui/field";
 
 export default function Home() {
   return (
@@ -44,10 +45,7 @@ export default function Home() {
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Link
-              href="/referencias"
-              className="bg-red px-6 py-3 text-sm font-medium text-paper-raised hover:bg-red-dark"
-            >
+            <Link href="/referencias" className={primaryButtonClass}>
               Gerar referências de graça
             </Link>
             <span className="text-sm text-ink-muted">
@@ -56,8 +54,12 @@ export default function Home() {
           </div>
         </div>
 
-        <section className="mt-24">
-          <ol className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+        <section className="mt-16 border border-rule bg-paper-raised px-6 py-12 sm:px-10 sm:py-14">
+          <span className="text-xs font-semibold tracking-wide text-red">Como funciona</span>
+          <h2 className="mt-2 font-serif text-2xl text-ink sm:text-3xl">
+            Três passos, do rascunho ao arquivo pronto
+          </h2>
+          <ol className="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-3">
             <Step n={1} title="Gere as referências">
               Preencha os dados de cada fonte e receba o texto formatado, ordenado e com o
               título em negrito, do jeito que a norma pede.
@@ -73,11 +75,16 @@ export default function Home() {
           </ol>
         </section>
 
-        <section className="mt-24 border-t border-rule pt-12">
-          <h2 className="font-serif text-2xl text-ink">O que é grátis, o que é pago</h2>
-          <div className="mt-8 grid grid-cols-1 gap-x-12 gap-y-10 sm:grid-cols-2">
+        <section className="mt-12 border border-rule bg-paper-raised px-6 py-12 sm:px-10 sm:py-14">
+          <span className="text-xs font-semibold tracking-wide text-red">Preço</span>
+          <h2 className="mt-2 font-serif text-2xl text-ink sm:text-3xl">
+            O que é grátis, o que é pago
+          </h2>
+          <div className="mt-10 grid grid-cols-1 gap-x-12 gap-y-10 sm:grid-cols-2">
             <div>
-              <h3 className="text-sm font-medium text-ink-muted">Sem custo, sem conta</h3>
+              <h3 className="text-xs font-semibold tracking-wide text-ink-muted">
+                Sem custo, sem conta
+              </h3>
               <ul className="mt-4 flex flex-col gap-3 text-ink">
                 <li>Gerador de referências ABNT, ilimitado</li>
                 <li>Editor de documento com o resultado inteiro visível na tela</li>
@@ -85,7 +92,9 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h3 className="text-sm font-medium text-ink-muted">Na hora de exportar</h3>
+              <h3 className="text-xs font-semibold tracking-wide text-ink-muted">
+                Na hora de exportar
+              </h3>
               <ul className="mt-4 flex flex-col gap-3 text-ink">
                 <li>O .docx final, pronto pra entregar</li>
                 <li>Capa, folha de rosto e sumário aplicados no arquivo</li>
@@ -106,8 +115,8 @@ export default function Home() {
 function Step({ n, title, children }: { n: number; title: string; children: React.ReactNode }) {
   return (
     <li>
-      <span className="font-serif text-sm text-red">{n}</span>
-      <h3 className="mt-2 font-serif text-lg text-ink">{title}</h3>
+      <span className="font-serif text-3xl text-red">{n}</span>
+      <h3 className="mt-3 font-serif text-lg text-ink">{title}</h3>
       <p className="mt-2 text-sm leading-relaxed text-ink-muted">{children}</p>
     </li>
   );

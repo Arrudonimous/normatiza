@@ -32,7 +32,12 @@ export function AuthorsField({ name, label }: { name: string; label: string }) {
               {...register(`${name}.${index}.nome`)}
             />
           </label>
-          <button type="button" onClick={() => remove(index)} className={`h-9 ${secondaryButtonClass}`}>
+          <button
+            type="button"
+            onClick={() => remove(index)}
+            aria-label="Remover autor"
+            className="flex h-10 shrink-0 items-center border border-rule px-3 text-xs text-ink-muted hover:border-red hover:text-red"
+          >
             Remover
           </button>
         </div>

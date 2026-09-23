@@ -92,7 +92,7 @@ function LivroFields() {
   return (
     <>
       <AuthorsField name="autores" label="Autores" />
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-4">
         <Field label="Título" className="col-span-2">
           <input className={inputClass} {...register("titulo")} />
         </Field>
@@ -121,7 +121,7 @@ function ArtigoFields() {
   return (
     <>
       <AuthorsField name="autores" label="Autores" />
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-4">
         <Field label="Título do artigo" className="col-span-2">
           <input className={inputClass} {...register("titulo")} />
         </Field>
@@ -159,7 +159,7 @@ function SiteFields() {
   return (
     <>
       <AuthorsField name="autores" label="Autores ou organização responsável (opcional)" />
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-4">
         <Field label="Título da página" className="col-span-2">
           <input className={inputClass} {...register("titulo")} />
         </Field>
@@ -195,7 +195,7 @@ function CapituloFields() {
         <input className={inputClass} {...register("tituloCapitulo")} />
       </Field>
       <AuthorsField name="autoresObra" label="Autores/organizadores da obra" />
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-4">
         <Field label="Título da obra" className="col-span-2">
           <input className={inputClass} {...register("tituloObra")} />
         </Field>
@@ -224,7 +224,7 @@ function TccFields() {
   return (
     <>
       <AuthorsField name="autores" label="Autor" />
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-4">
         <Field label="Título" className="col-span-2">
           <input className={inputClass} {...register("titulo")} />
         </Field>
@@ -264,7 +264,7 @@ function TccFields() {
 function LegislacaoFields() {
   const { register } = useFormCtx();
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-2 gap-4">
       <Field label="Jurisdição (ex.: BRASIL)">
         <input className={inputClass} {...register("jurisdicao")} />
       </Field>

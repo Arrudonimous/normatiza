@@ -78,7 +78,7 @@ export default function EditorPage() {
             </div>
           </div>
 
-          <aside className="flex flex-col gap-6">
+          <aside className="flex flex-col gap-6 lg:border-l lg:border-rule lg:pl-8">
             <div className={panelClass}>
               <h2 className="mb-3 text-sm font-medium text-ink-muted">Sumário</h2>
               <SummaryPreview blocks={blocks} />

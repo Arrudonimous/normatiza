@@ -77,14 +77,14 @@ function ReferenceItem({
   }
 
   return (
-    <li className="flex items-start justify-between gap-4 border border-rule bg-paper-raised p-4">
+    <li className="flex items-start justify-between gap-4 border border-l-4 border-rule border-l-red bg-paper-raised py-4 pl-5 pr-4">
       <div>
-        <span className="mb-1 block text-xs text-ink-muted">
+        <span className="mb-1.5 block text-xs font-semibold tracking-wide text-red">
           {REFERENCE_TYPE_LABELS[reference.type]}
         </span>
         <p
           ref={textRef}
-          className="text-sm leading-relaxed text-ink"
+          className="font-serif text-base leading-relaxed text-ink"
           dangerouslySetInnerHTML={{ __html: html }}
         />
         {copyState === "failed" && (
