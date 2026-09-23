@@ -38,6 +38,12 @@ export async function POST(request: NextRequest) {
     await updateDocument(documentId, { userId: user.id });
   }
 
+  // Admin exporta de graça, sem consumir pacote nem pedir pagamento.
+  if (user.isAdmin) {
+    const token = await createDownloadToken(documentId, null);
+    return NextResponse.json({ freeWithPack: true, downloadToken: token.token });
+  }
+
   // Se o usuário já tem um pacote ativo com cota sobrando, libera na hora, sem cobrar de novo.
   const activePack = await getActivePackWithQuota(user.id);
   if (activePack) {

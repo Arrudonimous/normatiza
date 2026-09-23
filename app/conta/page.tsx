@@ -37,24 +37,29 @@ export default async function ContaPage() {
 
         <section className={panelClass}>
           <h2 className="text-sm font-medium text-ink-muted">Pacote</h2>
-          {!pack && (
+          {user.isAdmin && (
+            <p className="mt-3 text-sm text-ink">
+              Conta admin: exportação liberada em qualquer documento, sem pacote nem pagamento.
+            </p>
+          )}
+          {!user.isAdmin && !pack && (
             <p className="mt-3 text-sm text-ink">
               Você ainda não comprou nenhum pacote. Ele libera 3 documentos por 30 dias.
             </p>
           )}
-          {pack && packActive && (
+          {!user.isAdmin && pack && packActive && (
             <p className="mt-3 text-sm text-ink">
               Pacote ativo: {pack.documentsUsed} de {pack.documentsLimit} documentos usados.
               Vale até {formatDate(pack.expiresAt)} ({daysLeft} {daysLeft === 1 ? "dia" : "dias"}).
             </p>
           )}
-          {pack && !packActive && (
+          {!user.isAdmin && pack && !packActive && (
             <p className="mt-3 text-sm text-ink">
               Seu último pacote ({pack.documentsUsed} de {pack.documentsLimit} usados) não vale mais
               a partir de {formatDate(pack.expiresAt)}.
             </p>
           )}
-          {(!pack || !packActive) && (
+          {!user.isAdmin && (!pack || !packActive) && (
             <Link href="/editor" className={`mt-4 inline-block ${secondaryButtonClass}`}>
               Ir pro editor
             </Link>
