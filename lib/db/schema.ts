@@ -5,6 +5,7 @@ import {
   pgTable,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
 
@@ -86,3 +87,19 @@ export const packs = pgTable("packs", {
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+/**
+ * Limite diário do verificador de IA público (`/verificador-ia`), por IP, já que
+ * essa tela não exige login. Sem isso, um script poderia esgotar sozinho a cota
+ * gratuita da Hugging Face que é compartilhada por todo mundo.
+ */
+export const aiCheckUsage = pgTable(
+  "ai_check_usage",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    ip: text("ip").notNull(),
+    day: text("day").notNull(), // "AAAA-MM-DD", em vez de timestamp, pra facilitar o unique por dia
+    count: integer("count").notNull().default(0),
+  },
+  (table) => [uniqueIndex("ai_check_usage_ip_day_idx").on(table.ip, table.day)],
+);

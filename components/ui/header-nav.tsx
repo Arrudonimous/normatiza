@@ -51,6 +51,13 @@ function NavLinks({
       <NavLink href="/editor" active={pathname.startsWith("/editor")} onClick={onNavigate}>
         Editor
       </NavLink>
+      <NavLink
+        href="/verificador-ia"
+        active={pathname.startsWith("/verificador-ia")}
+        onClick={onNavigate}
+      >
+        Verificador de IA
+      </NavLink>
 
       {user ? (
         <>

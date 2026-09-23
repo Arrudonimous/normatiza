@@ -73,8 +73,9 @@ export async function translateToEnglish(text: string): Promise<string> {
 }
 
 export interface AiDetectionResult {
-  aiProbability: number; // 0 a 1
+  aiProbability: number; // 0 a 1, média entre as seções analisadas
   label: "ai" | "human" | "unknown";
+  sections: number; // quantos trechos de ~380 palavras foram analisados
 }
 
 interface ClassificationPrediction {
@@ -82,10 +83,15 @@ interface ClassificationPrediction {
   score: number;
 }
 
-export async function detectAiText(englishText: string): Promise<AiDetectionResult> {
-  // O RoBERTa aceita ~512 tokens; corta pra uma amostra representativa em vez de estourar.
-  const sample = englishText.split(/\s+/).slice(0, 380).join(" ");
-  const raw = await hfRequest(DETECT_MODEL, { inputs: sample });
+interface SectionResult {
+  aiProbability: number;
+  label: "ai" | "human" | "unknown";
+}
+
+const WORDS_PER_SECTION = 380; // o RoBERTa aceita ~512 tokens; essa é uma amostra segura.
+
+async function detectAiSection(englishChunk: string): Promise<SectionResult> {
+  const raw = await hfRequest(DETECT_MODEL, { inputs: englishChunk });
   const predictions = (Array.isArray(raw) && Array.isArray(raw[0]) ? raw[0] : raw) as
     ClassificationPrediction[];
 
@@ -102,4 +108,25 @@ export async function detectAiText(englishText: string): Promise<AiDetectionResu
   // Rótulos genéricos (LABEL_0/LABEL_1): não dá pra saber qual é qual com certeza.
   const top = predictions.reduce((a, b) => (b.score > a.score ? b : a));
   return { aiProbability: top.score, label: "unknown" };
+}
+
+/**
+ * `maxSections` controla quantos trechos de ~380 palavras são analisados (cada um é
+ * uma chamada à API). Planos maiores podem varrer mais do texto em vez de só o começo.
+ */
+export async function detectAiText(englishText: string, maxSections = 1): Promise<AiDetectionResult> {
+  const chunks = chunkByWords(englishText, WORDS_PER_SECTION).slice(0, Math.max(1, maxSections));
+  const sections = await Promise.all(chunks.map(detectAiSection));
+
+  const known = sections.filter((s) => s.label !== "unknown");
+  if (known.length === 0) {
+    return { aiProbability: sections[0].aiProbability, label: "unknown", sections: sections.length };
+  }
+
+  const avgProbability = known.reduce((sum, s) => sum + s.aiProbability, 0) / known.length;
+  return {
+    aiProbability: avgProbability,
+    label: avgProbability >= 0.5 ? "ai" : "human",
+    sections: sections.length,
+  };
 }
