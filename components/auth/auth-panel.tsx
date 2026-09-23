@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Field, inputClass, panelClass, primaryButtonClass } from "../ui/field";
 import { login, signup, type CurrentUser } from "@/lib/auth/client";
 
@@ -77,6 +78,19 @@ export function AuthPanel({
         <button type="submit" disabled={loading} className={`self-start ${primaryButtonClass}`}>
           {loading ? "Só um instante..." : mode === "signup" ? "Criar conta e continuar" : "Entrar e continuar"}
         </button>
+        {mode === "signup" && (
+          <p className="text-xs text-ink-muted">
+            Ao criar uma conta, você concorda com os{" "}
+            <Link href="/termos" target="_blank" className="text-red hover:underline">
+              Termos de Uso
+            </Link>{" "}
+            e a{" "}
+            <Link href="/privacidade" target="_blank" className="text-red hover:underline">
+              Política de Privacidade
+            </Link>
+            .
+          </p>
+        )}
       </form>
     </div>
   );

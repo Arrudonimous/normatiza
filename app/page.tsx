@@ -101,8 +101,19 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="mx-auto w-full max-w-3xl px-6 py-10 text-sm text-ink-muted">
-        Normatiza
+      <footer className="mx-auto flex w-full max-w-3xl flex-wrap items-center justify-between gap-4 border-t border-rule px-6 py-10 text-sm text-ink-muted">
+        <span>Normatiza</span>
+        <div className="flex gap-6">
+          <Link href="/termos" className="hover:text-ink">
+            Termos de Uso
+          </Link>
+          <Link href="/privacidade" className="hover:text-ink">
+            Privacidade
+          </Link>
+          <a href="mailto:arrudadiego45@gmail.com" className="hover:text-ink">
+            Contato
+          </a>
+        </div>
       </footer>
     </div>
   );

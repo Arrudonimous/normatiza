@@ -13,9 +13,30 @@ const ptSerif = PT_Serif({
   weight: ["400", "700"],
 });
 
+const SITE_URL = "https://normatiza.vercel.app";
+const DESCRIPTION =
+  "Formatação ABNT sem perder um dia inteiro nisso. Gere referências, monte o documento no editor e exporte formatado.";
+
 export const metadata: Metadata = {
-  title: "Normatiza",
-  description: "Formatação ABNT de referências e documentos acadêmicos",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Normatiza",
+    template: "%s | Normatiza",
+  },
+  description: DESCRIPTION,
+  openGraph: {
+    title: "Normatiza",
+    description: DESCRIPTION,
+    url: SITE_URL,
+    siteName: "Normatiza",
+    locale: "pt_BR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Normatiza",
+    description: DESCRIPTION,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
