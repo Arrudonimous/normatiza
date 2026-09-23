@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ImportDocx } from "@/components/document-editor/import-docx";
 import { MetadataForm } from "@/components/document-editor/metadata-form";
 import { SummaryPreview } from "@/components/document-editor/summary-preview";
 import { TiptapEditor } from "@/components/document-editor/tiptap-editor";
@@ -15,13 +16,23 @@ import type { Reference } from "@/lib/abnt/types";
 export default function EditorPage() {
   const [metadata, setMetadata] = useState(emptyDocumentMetadata());
   const [blocks, setBlocks] = useState<DocumentBlock[]>([]);
-  // Calculado só uma vez: o Tiptap é a fonte de verdade depois de montado, então isso
-  // nunca deve ser recomputado a partir de `blocks` a cada render (ver TiptapEditor).
-  const [initialEditorContent] = useState(() => blocksToTiptapJson([]));
+  // O Tiptap é a fonte de verdade depois de montado (ver TiptapEditor), então isso só
+  // é recalculado quando `editorVersion` muda — ou seja, quando uma importação de
+  // .docx substitui o conteúdo e força o editor a remontar do zero.
+  const [editorContent, setEditorContent] = useState(() => blocksToTiptapJson([]));
+  const [editorVersion, setEditorVersion] = useState(0);
+  const [importWarnings, setImportWarnings] = useState<string[]>([]);
   const [references, setReferences] = useState<Reference[]>([]);
   const [documentId, setDocumentId] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  function handleImported(importedBlocks: DocumentBlock[], warnings: string[]) {
+    setBlocks(importedBlocks);
+    setEditorContent(blocksToTiptapJson(importedBlocks));
+    setEditorVersion((v) => v + 1);
+    setImportWarnings(warnings);
+  }
 
   async function handleExport() {
     setExporting(true);
@@ -66,7 +77,15 @@ export default function EditorPage() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[2fr_1fr]">
           <div className="flex flex-col gap-6">
             <MetadataForm metadata={metadata} onChange={setMetadata} />
-            <TiptapEditor initialContent={initialEditorContent} onChange={setBlocks} />
+            <ImportDocx onImported={handleImported} />
+            {importWarnings.length > 0 && (
+              <ul className="border border-l-4 border-rule border-l-red bg-paper-raised py-3 pl-4 pr-3 text-xs text-ink-muted">
+                {importWarnings.map((w, i) => (
+                  <li key={i}>{w}</li>
+                ))}
+              </ul>
+            )}
+            <TiptapEditor key={editorVersion} initialContent={editorContent} onChange={setBlocks} />
 
             <div className="flex flex-col gap-3">
               <h2 className="text-sm font-medium text-ink-muted">Referências</h2>
