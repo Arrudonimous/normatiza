@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getCurrentUser } from "@/lib/auth/current-user";
 import { createDocument, getDocument, updateDocument } from "@/lib/db/documents";
 import type { DocumentBlock, DocumentMetadata } from "@/lib/document-model";
 import type { Reference } from "@/lib/abnt/types";
@@ -12,12 +13,14 @@ interface SaveDocumentBody {
 
 export async function POST(request: NextRequest) {
   const body = (await request.json()) as SaveDocumentBody;
+  const user = await getCurrentUser();
 
   const data = {
     title: body.metadata.titulo || "",
     metadata: body.metadata,
     content: { blocks: body.blocks },
     references: body.references,
+    ...(user ? { userId: user.id } : {}),
   };
 
   const row = body.documentId

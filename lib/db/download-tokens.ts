@@ -4,7 +4,7 @@ import { downloadTokens } from "./schema";
 
 const TOKEN_VALIDITY_MINUTES = 30;
 
-export async function createDownloadToken(documentId: string, paymentId: string) {
+export async function createDownloadToken(documentId: string, paymentId: string | null) {
   const expiresAt = new Date(Date.now() + TOKEN_VALIDITY_MINUTES * 60 * 1000);
   const [row] = await db()
     .insert(downloadTokens)

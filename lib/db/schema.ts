@@ -1,4 +1,5 @@
 import {
+  integer,
   jsonb,
   pgTable,
   text,
@@ -9,12 +10,13 @@ import {
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
   email: text("email").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
 export const documents = pgTable("documents", {
   id: uuid("id").primaryKey().defaultRandom(),
-  // preparado pra autenticação futura; no MVP fica sempre nulo (sem login)
+  // nulo até o usuário logar (rascunho pode começar sem conta; dono é atribuído no login/export)
   userId: uuid("user_id").references(() => users.id),
   title: text("title").notNull().default(""),
   // instituição, curso, autor, orientador, cidade, ano
@@ -32,9 +34,15 @@ export const documents = pgTable("documents", {
 
 export const payments = pgTable("payments", {
   id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id),
   documentId: uuid("document_id")
     .notNull()
     .references(() => documents.id),
+  // "avulso": libera só esse documento. "pacote": libera esse documento e cria/renova
+  // o pacote de 3 documentos em 30 dias (ver tabela `packs`).
+  kind: text("kind", { enum: ["avulso", "pacote"] }).notNull(),
   infinitepayOrderNsu: text("infinitepay_order_nsu").notNull(),
   infinitepayTransactionNsu: text("infinitepay_transaction_nsu"),
   status: text("status", { enum: ["pending", "approved", "rejected"] })
@@ -50,9 +58,28 @@ export const downloadTokens = pgTable("download_tokens", {
   documentId: uuid("document_id")
     .notNull()
     .references(() => documents.id),
+  // nulo quando o download veio da cota do pacote em vez de um pagamento avulso
+  paymentId: uuid("payment_id").references(() => payments.id),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  usedAt: timestamp("used_at", { withTimezone: true }),
+});
+
+/**
+ * Pacote de 30 dias (R$14,90): libera até `documentsLimit` exportações sem cobrança
+ * nova enquanto `documentsUsed < documentsLimit` e `expiresAt` não passou. Não é uma
+ * assinatura de verdade (a InfinityPay não tem API pública de cobrança recorrente):
+ * quando o prazo ou a cota acabam, o usuário precisa comprar um pacote novo.
+ */
+export const packs = pgTable("packs", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id),
   paymentId: uuid("payment_id")
     .notNull()
     .references(() => payments.id),
+  documentsLimit: integer("documents_limit").notNull().default(3),
+  documentsUsed: integer("documents_used").notNull().default(0),
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
-  usedAt: timestamp("used_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });

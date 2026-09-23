@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createDownloadToken } from "@/lib/db/download-tokens";
+import { createPack } from "@/lib/db/packs";
 import { getPaymentByOrderNsu, markPaymentApproved, markPaymentRejected } from "@/lib/db/payments";
 import { checkPayment, type InfinitePayWebhookPayload } from "@/lib/payments/infinitepay";
 
@@ -25,6 +26,11 @@ export async function POST(request: NextRequest) {
   }
 
   await markPaymentApproved(payment.id, payload.transaction_nsu);
+
+  if (payment.kind === "pacote") {
+    await createPack(payment.userId, payment.id);
+  }
+
   const token = await createDownloadToken(payment.documentId, payment.id);
 
   return NextResponse.json({ ok: true, paid: true, downloadToken: token.token });

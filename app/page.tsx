@@ -78,28 +78,30 @@ export default function Home() {
         <section className="mt-12 border border-rule bg-paper-raised px-6 py-12 sm:px-10 sm:py-14">
           <span className="text-xs font-semibold tracking-wide text-red">Preço</span>
           <h2 className="mt-2 font-serif text-2xl text-ink sm:text-3xl">
-            O que é grátis, o que é pago
+            Grátis até o preview. Você paga só pra baixar
           </h2>
+          <p className="mt-4 max-w-[60ch] text-sm leading-relaxed text-ink-muted">
+            O gerador de referências, o editor e a importação de .docx não custam nada e não
+            pedem conta. Você só cria uma conta e paga na hora de baixar o documento pronto,
+            e aí tem duas formas de fazer isso.
+          </p>
+
           <div className="mt-10 grid grid-cols-1 gap-x-12 gap-y-10 sm:grid-cols-2">
             <div>
-              <h3 className="text-xs font-semibold tracking-wide text-ink-muted">
-                Sem custo, sem conta
-              </h3>
-              <ul className="mt-4 flex flex-col gap-3 text-ink">
-                <li>Gerador de referências ABNT, ilimitado</li>
-                <li>Editor de documento com o resultado inteiro visível na tela</li>
-                <li>Importação de um .docx que você já começou</li>
-              </ul>
+              <h3 className="text-xs font-semibold tracking-wide text-ink-muted">Avulso</h3>
+              <p className="mt-2 font-serif text-3xl text-ink">R$ 9,90</p>
+              <p className="mt-3 text-sm leading-relaxed text-ink-muted">
+                Libera o download de um documento. Bom pra quem só tem um trabalho pra entregar
+                esse semestre.
+              </p>
             </div>
             <div>
-              <h3 className="text-xs font-semibold tracking-wide text-ink-muted">
-                Na hora de exportar
-              </h3>
-              <ul className="mt-4 flex flex-col gap-3 text-ink">
-                <li>O .docx final, pronto pra entregar</li>
-                <li>Capa, folha de rosto e sumário aplicados no arquivo</li>
-                <li>Pagamento avulso, só quando você exporta</li>
-              </ul>
+              <h3 className="text-xs font-semibold tracking-wide text-red">Pacote de 3</h3>
+              <p className="mt-2 font-serif text-3xl text-ink">R$ 14,90</p>
+              <p className="mt-3 text-sm leading-relaxed text-ink-muted">
+                Libera 3 documentos dentro de 30 dias. Não é uma assinatura com cobrança
+                automática: quando o prazo ou os 3 documentos acabam, é só comprar outro pacote.
+              </p>
             </div>
           </div>
         </section>
