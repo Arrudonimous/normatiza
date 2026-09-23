@@ -66,10 +66,19 @@ export function AiCheckerClient({
       </h1>
       <p className="mt-4 max-w-[60ch] text-ink-muted">
         Cola um trecho do seu trabalho e a gente traduz pra inglês e roda um classificador
-        treinado pra distinguir texto humano de texto gerado por ChatGPT. É uma estimativa,
-        não uma prova: serve pra você revisar antes de entregar, não pra acusar ninguém.
+        treinado pra distinguir texto humano de texto gerado por IA.
       </p>
-      <p className="mt-2 text-sm text-ink-muted">{tierLabel}</p>
+
+      <div className="mt-4 border border-l-4 border-rule border-l-red bg-paper-raised py-3 pl-4 pr-3">
+        <p className="text-sm text-ink">
+          <strong>A precisão em português ainda é baixa.</strong> Em testes, o mesmo texto às
+          vezes sai como humano e às vezes como IA, dependendo de detalhes pequenos na hora de
+          analisar. Trate o resultado como um alerta a mais pra revisar seu texto, nunca como
+          prova de que algo foi ou não foi escrito por IA.
+        </p>
+      </div>
+
+      <p className="mt-3 text-sm text-ink-muted">{tierLabel}</p>
 
       <textarea
         value={text}
@@ -92,7 +101,8 @@ export function AiCheckerClient({
 
       {wordCount > 0 && wordCount < 40 && (
         <p className="mt-3 text-xs text-ink-muted">
-          Escreva pelo menos uns dois parágrafos (40 palavras) pra ter uma estimativa confiável.
+          Escreva pelo menos uns dois parágrafos (40 palavras) pra o modelo ter texto suficiente
+          pra analisar.
         </p>
       )}
 

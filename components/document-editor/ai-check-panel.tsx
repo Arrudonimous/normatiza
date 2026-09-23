@@ -47,9 +47,10 @@ export function AiCheckPanel({ blocks }: { blocks: DocumentBlock[] }) {
     <div className={panelClass}>
       <h2 className="text-sm font-medium text-ink-muted">Parece com IA?</h2>
       <p className="mt-2 text-xs leading-relaxed text-ink-muted">
-        Estimativa experimental: traduzimos uma amostra do seu texto (até {MAX_WORDS_FROM_EDITOR}{" "}
-        palavras) pro inglês antes de analisar, porque o modelo é treinado nesse idioma. Não é
-        prova de nada, é só um alerta pra você revisar antes de entregar.
+        Traduzimos uma amostra do seu texto (até {MAX_WORDS_FROM_EDITOR} palavras) pro inglês
+        antes de analisar. <strong>A precisão em português ainda é baixa</strong>: em testes, o
+        mesmo texto às vezes sai como humano e às vezes como IA. Trate como um alerta a mais,
+        nunca como prova.
       </p>
 
       <button onClick={handleCheck} disabled={loading} className={`mt-4 ${secondaryButtonClass}`}>
