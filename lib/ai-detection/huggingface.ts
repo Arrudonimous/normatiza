@@ -56,15 +56,18 @@ function chunkByWords(text: string, maxWords: number): string[] {
 }
 
 export async function translateToEnglish(text: string): Promise<string> {
-  // ~350 palavras por chunk pra não estourar o limite de tokens do modelo Marian.
-  const chunks = chunkByWords(text, 350);
+  // Texto formal com números e citações (ex.: "Silva et al. (2023, p. 45)") tokeniza
+  // bem mais denso que texto corrido, então 250 palavras por chunk (em vez de 350)
+  // e "truncation" no payload evitam o erro "index out of range" do modelo Marian.
+  const chunks = chunkByWords(text, 250);
   const translated: string[] = [];
 
   for (const chunk of chunks) {
     // ">>pt<<" diz pro modelo multilíngue de qual idioma de origem traduzir.
-    const result = (await hfRequest(TRANSLATE_MODEL, { inputs: `>>pt<< ${chunk}` })) as
-      | { translation_text?: string }[]
-      | { translation_text?: string };
+    const result = (await hfRequest(TRANSLATE_MODEL, {
+      inputs: `>>pt<< ${chunk}`,
+      parameters: { truncation: true },
+    })) as { translation_text?: string }[] | { translation_text?: string };
     const item = Array.isArray(result) ? result[0] : result;
     translated.push(item?.translation_text ?? "");
   }
@@ -88,10 +91,31 @@ interface SectionResult {
   label: "ai" | "human" | "unknown";
 }
 
-const WORDS_PER_SECTION = 380; // o RoBERTa aceita ~512 tokens; essa é uma amostra segura.
+// O RoBERTa aceita ~512 tokens, mas texto formal/traduzido pode tokenizar em mais de
+// 1 token por palavra (nomes, pontuação, números), então 380 palavras já estourou o
+// limite em alguns casos reais. 260 dá mais folga, e "truncation" no payload garante
+// que o Hugging Face corta em vez de dar erro se ainda assim passar do limite.
+const WORDS_PER_SECTION = 260;
 
 async function detectAiSection(englishChunk: string): Promise<SectionResult> {
-  const raw = await hfRequest(DETECT_MODEL, { inputs: englishChunk });
+  let raw: unknown;
+  try {
+    raw = await hfRequest(DETECT_MODEL, {
+      inputs: englishChunk,
+      parameters: { truncation: true },
+    });
+  } catch (err) {
+    // Se mesmo com truncation o texto ainda estourar o limite de tokens do modelo
+    // (nomes próprios, números e pontuação tokenizam de forma imprevisível), corta
+    // o trecho pela metade e tenta uma última vez em vez de falhar a verificação inteira.
+    if (err instanceof Error && /tensor|size/i.test(err.message)) {
+      const halfWords = englishChunk.split(/\s+/).filter(Boolean);
+      const half = halfWords.slice(0, Math.ceil(halfWords.length / 2)).join(" ");
+      raw = await hfRequest(DETECT_MODEL, { inputs: half, parameters: { truncation: true } });
+    } else {
+      throw err;
+    }
+  }
   const predictions = (Array.isArray(raw) && Array.isArray(raw[0]) ? raw[0] : raw) as
     ClassificationPrediction[];
 
