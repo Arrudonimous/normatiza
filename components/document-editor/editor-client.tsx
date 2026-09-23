@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AuthPanel } from "@/components/auth/auth-panel";
+import { AiCheckPanel } from "@/components/document-editor/ai-check-panel";
 import { ImportDocx } from "@/components/document-editor/import-docx";
 import { MetadataForm } from "@/components/document-editor/metadata-form";
 import { PricingChoice } from "@/components/document-editor/pricing-choice";
@@ -176,6 +177,8 @@ export function EditorClient({
             <h2 className="mb-3 text-sm font-medium text-ink-muted">Sumário</h2>
             <SummaryPreview blocks={blocks} />
           </div>
+
+          {user && <AiCheckPanel blocks={blocks} />}
 
           {downloadToken ? (
             <div className={`flex flex-col gap-2 ${panelClass}`}>
